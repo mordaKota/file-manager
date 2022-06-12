@@ -126,4 +126,3 @@ export const rm = async (userPath, userArgs) => {
 
   await remove(filePath);
 }
-

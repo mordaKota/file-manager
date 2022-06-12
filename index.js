@@ -2,6 +2,7 @@
 import { __dirname, __homedir, root} from "./modules/constants.js";
 import { ls, up, cd} from  "./modules/nwd.js";
 import { read, add, rn, cp, mv, rm } from "./modules/fsops.js"
+import { hash } from "./modules/hash.js"
 
 let username = '';
 let currentDir = __homedir;
@@ -77,7 +78,11 @@ const init = async () => {
         case 'rm':
           await rm (currentDir, args);
           break;
-            
+        
+        case 'hash':
+          await hash (currentDir, args);
+          break;
+        
         case 'exit':
           exit();
 
