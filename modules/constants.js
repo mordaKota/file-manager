@@ -2,7 +2,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import os  from 'os';
 import { stat, access } from 'fs/promises';
-import { captureRejectionSymbol } from 'events';
 
 export const __homedir = os.homedir();
 const __filename = fileURLToPath(import.meta.url);
@@ -27,10 +26,13 @@ export const isDirExists = async (userPath) => {
   }
 }
 
-
-
-
-export const isFileExists = async (userPath) => (await stat(userPath)).isFile();
+export const isFileExists = async (userPath) =>  {
+  try {
+    return (await stat(userPath)).isFile();
+  } catch {
+    return false;
+  }
+}
 
 export const checkArgsCount = (count) => (userArgs) => {
   if (Object.keys(userArgs).length !== count) {

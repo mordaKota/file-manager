@@ -1,6 +1,7 @@
 //Run: npm run start -- --username=your_username
 import { __dirname, __homedir, root} from "./modules/constants.js";
 import { ls, up, cd} from  "./modules/nwd.js";
+import { read, add, rn, cp, mv, rm } from "./modules/fsops.js"
 
 let username = '';
 let currentDir = __homedir;
@@ -52,7 +53,31 @@ const init = async () => {
         case 'ls':
           await ls(currentDir, args);
           break;
-      
+
+        case 'cat':
+          await read(currentDir, args);
+          break;
+        
+        case 'add':
+          await add (currentDir, args);
+          break;
+        
+        case 'rn':
+          await rn (currentDir, args);
+          break;
+        
+        case 'cp':
+          await cp (currentDir, args);
+          break;
+        
+        case 'mv':
+          await mv (currentDir, args);
+          break;
+        
+        case 'rm':
+          await rm (currentDir, args);
+          break;
+            
         case 'exit':
           exit();
 
@@ -60,7 +85,8 @@ const init = async () => {
           console.warn(`Unexpected command: ${cmd}`);
       } 
     } catch (e) {
-      console.error(`Error: ${e.message}`);
+      //console.error(`Error: ${e.message}`);
+      console.error(e);
     }
 
   });
