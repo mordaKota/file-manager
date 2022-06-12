@@ -32,11 +32,11 @@ export const cd = async (userPath, userArgs) => {
   const dirExists = await isDirExists(newPath);
 
   if (!exists) {
-    throw new Error('Operation fail: No such directory');
+    throw new Error('No such directory');
   }
 
   if (!dirExists) {
-    throw new Error('Operation fail: The specified path contains a file, not a directory');
+    throw new Error('The specified path contains a file, not a directory');
   }
 
   return newPath;

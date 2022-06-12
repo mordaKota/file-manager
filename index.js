@@ -3,8 +3,10 @@ import { __dirname, __homedir, root} from "./modules/constants.js";
 import { ls, up, cd} from  "./modules/nwd.js";
 import { read, add, rn, cp, mv, rm } from "./modules/fsops.js"
 import { hash } from "./modules/hash.js"
-import { compress, decompress } from "./modules/zip.js"
+import { compress } from "./modules/compress.js"
+import { decompress } from "./modules/decompress.js"
 import { getOsInfo } from "./modules/osinfo.js"
+import os from "os";
 
 let username = '';
 let currentDir = __homedir;
@@ -69,6 +71,7 @@ const init = async () => {
         
         case 'ls':
           await ls(currentDir, args);
+          console.log(`You are currently in ${currentDir}`);
           break;
 
         case 'cat':
@@ -118,8 +121,8 @@ const init = async () => {
           console.warn(`Unexpected command: ${cmd}`);
       } 
     } catch (e) {
-      //console.error(`Error: ${e.message}`);
-      console.error(e);
+      console.error(`Operation fail: ${e.message}`);
+      //console.error(e);
     }
 
   });
