@@ -60,7 +60,7 @@ const init = async () => {
           console.warn(`Unexpected command: ${cmd}`);
       } 
     } catch (e) {
-      console.error(e.message);
+      console.error(`Error: ${e.message}`);
     }
 
   });

@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os  from 'os';
-import { stat } from 'fs/promises';
+import { stat, access } from 'fs/promises';
 import { captureRejectionSymbol } from 'events';
 
 export const __homedir = os.homedir();
@@ -12,14 +12,23 @@ export const root = (os.platform() === "win32") ? `${process.cwd().split(path.se
 
 export const isExist = async (userPath) => {
   try {
-    await fs.access(userPath);
-  } catch {
+    await access(userPath);
+  } catch(e) {
     return false;
   }
   return true;
 }
 
-export const isDirExists = async (userPath) => (await stat(userPath)).isDirectory();
+export const isDirExists = async (userPath) => {
+  try {
+    return (await stat(userPath)).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+
+
 
 export const isFileExists = async (userPath) => (await stat(userPath)).isFile();
 

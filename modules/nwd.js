@@ -1,5 +1,5 @@
 import { readdir } from "fs/promises";
-import { __dirname, isExist, root, checkArgsCount } from "./constants.js";
+import { __dirname, isExist, root, checkArgsCount, isDirExists } from "./constants.js";
 import path from 'path';
 
 export const ls = async (userPath, userArgs) => {
@@ -26,15 +26,22 @@ export const up = async (userPath, userArgs) => {
 
 export const cd = async (userPath, userArgs) => {
   checkArgsCount(userArgs, 1);
+  const newPath = path.resolve(userPath, userArgs['0']);
+
+  const exists = await isExist(newPath);
+  const dirExists = await isDirExists(newPath);
 
   console.log({
-    userPath,
-    a: userArgs['0']
+    newPath, exists, dirExists 
   });
-  const newPath = path.resolve(userPath, userArgs['0']);
-  console.log(newPath);
-  if (isExist(newPath)) {
-    console.log(newPath);
-    return newPath;
+
+  if (!exists) {
+    throw new Error('No such directory');
   }
+
+  if (!dirExists) {
+    throw new Error('The specified path contains a file, not a directory');
+  }
+
+  return newPath;
 }
