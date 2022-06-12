@@ -11,16 +11,19 @@ export const read = async (userPath, userArgs) => {
   const fileExists = await isFileExists(filePath);
 
   if (!exists) {
-    throw new Error('No such file');
+    throw new Error('Operations fail: No such file');
   }
 
   if (!fileExists) {
-    throw new Error('The specified path contains a directory, not a file');
+    throw new Error('Operations fail: The specified path contains a directory, not a file');
   }
 
   const readStream = createReadStream(filePath);
   readStream.pipe(process.stdout);
 
+  return new Promise((res) => {
+    readStream.on("end", () => res());
+  });
 }
 
 export const add = async (userPath, userArgs) => {
@@ -28,7 +31,7 @@ export const add = async (userPath, userArgs) => {
   const filePath = path.resolve(userPath, userArgs['0']);
 
   if (await isExist(filePath)) {
-    throw new Error('The file already exists');
+    throw new Error('Operations fail: The file already exists');
   }
 
   await writeFile(filePath, '');
@@ -41,11 +44,11 @@ export const rn = async (userPath, userArgs) => {
   const newFilePath = path.resolve(userPath, userArgs['1'] + path.extname(userArgs['0']));
 
   if (!await isExist(filePath)) {
-    throw new Error('No such file or directory');
+    throw new Error('Operations fail: No such file or directory');
   }
 
   if (await isExist(newFilePath)) {
-    throw new Error('The specified name is already used for another file');
+    throw new Error('Operations fail: The specified name is already used for another file');
   }
 
   await rename(filePath, newFilePath);

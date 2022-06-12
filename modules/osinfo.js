@@ -11,7 +11,13 @@ export const getOsInfo = async (userPath, userArgs) => {
       break;
 
     case '--cpus':
-      console.log(os.cpus());
+      const cpus = os.cpus();
+
+      console.log(`Amount of CPU's: ${cpus.length}`);
+      
+      cpus.forEach(cpu => {
+        console.log(`model: ${cpu.model}, speed: ${cpu.speed / 1000} GHz`);
+      })
       break;
     
     case '--homedir':

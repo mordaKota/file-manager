@@ -52,7 +52,6 @@ const exit = () => {
 
 const init = async () => {
   process.stdin.on('data', async userInput => {
-    
     const userInputX = splitArgs(userInput) // userInput.toString().trim().split(' ');
 
     let cmd = userInputX.shift();
@@ -66,16 +65,15 @@ const init = async () => {
 
         case 'cd':
           currentDir = await cd(currentDir, args);
-          console.log(`You are currently in ${currentDir}`);
           break;
         
         case 'ls':
           await ls(currentDir, args);
-          console.log(`You are currently in ${currentDir}`);
           break;
 
         case 'cat':
           await read(currentDir, args);
+          console.log('');
           break;
         
         case 'add':
@@ -118,10 +116,12 @@ const init = async () => {
           exit();
 
         default:
-          console.warn(`Unexpected command: ${cmd}`);
+          console.warn(`Invalid input: ${cmd}`);
       } 
+
+      console.log(`You are currently in ${currentDir}`);
     } catch (e) {
-      console.error(`Operation fail: ${e.message}`);
+      console.error(`Error: ${e.message}`);
       //console.error(e);
     }
 

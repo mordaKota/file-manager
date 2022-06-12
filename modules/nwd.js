@@ -13,12 +13,11 @@ export const up = async (userPath, userArgs) => {
   checkArgsCount(0)(userArgs);
   
   if (userPath === root) {
-    console.log(`You are already in ${userPath}`);
+    console.warn(`Warning: You are already in ${userPath}`);
     return userPath;
   }
   
   const parentPath = path.join(userPath, '..');
-  console.log(`You are currently in ${parentPath}`);
 
   return parentPath;
   
@@ -32,11 +31,11 @@ export const cd = async (userPath, userArgs) => {
   const dirExists = await isDirExists(newPath);
 
   if (!exists) {
-    throw new Error('No such directory');
+    throw new Error('Operations fail: No such directory');
   }
 
   if (!dirExists) {
-    throw new Error('The specified path contains a file, not a directory');
+    throw new Error('Operations fail: The specified path contains a file, not a directory');
   }
 
   return newPath;

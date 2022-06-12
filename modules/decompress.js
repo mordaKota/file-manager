@@ -18,23 +18,23 @@ export const decompress = async (userPath, userArgs) => {
   const writeFilePath = path.resolve(userPath, userArgs['1'], newFileName);
 
   if (!await isExist(readFilePath)) {
-    throw new Error('No such source file');
+    throw new Error('Operations fail: No such source file');
   }
 
   if (!await isExist(path.resolve(userPath, userArgs['1']))) {
-    throw new Error('No such destination folder');
+    throw new Error('Operations fail: No such destination folder');
   }
 
   if (!await isFileExists(readFilePath)) {
-    throw new Error('The source file is not a file');
+    throw new Error('Operations fail: The source file is not a file');
   }
 
   if (!await isDirExists(path.resolve(userPath, userArgs['1']))) {
-    throw new Error('The destination folder is not a folder');
+    throw new Error('Operations fail: The destination folder is not a folder');
   }
 
   if (await isExist(writeFilePath)) {
-    throw new Error('The file already exists in the destination folder');
+    throw new Error('Operations fail: The file already exists in the destination folder');
   }
 
   const readStream = createReadStream(readFilePath);

@@ -8,11 +8,11 @@ export const hash = async (userPath, userArgs) => {
   const filePath = path.resolve(userPath, userArgs['0']);
 
   if (!await isExist(filePath)) {
-    throw new Error('No such file');
+    throw new Error('Operations fail: No such file');
   }
 
   if (!await isFileExists(filePath)) {
-    throw new Error('The specified path contains the folder, not file');
+    throw new Error('Operations fail: The specified path contains the folder, not file');
   }
 
   const content = await readFile(filePath, 'utf8');
