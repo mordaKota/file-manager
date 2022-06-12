@@ -4,6 +4,7 @@ import { ls, up, cd} from  "./modules/nwd.js";
 import { read, add, rn, cp, mv, rm } from "./modules/fsops.js"
 import { hash } from "./modules/hash.js"
 import { compress, decompress } from "./modules/zip.js"
+import { getOsInfo } from "./modules/osinfo.js"
 
 let username = '';
 let currentDir = __homedir;
@@ -17,6 +18,20 @@ const parseArgs = (args) => args.reduce((result, arg, index) => {
   result[argX[0]] = argX[1];
   return result;
 }, {});
+
+const splitArgs = (args) => {
+  var myRegexp = /[^\s"]+|"([^"]*)"/gi;
+  var myArray = [];
+
+  do {
+    var match = myRegexp.exec(args);
+    if (match != null) {
+      myArray.push(match[1] ? match[1] : match[0]);
+    }
+  } while (match != null);
+
+  return myArray;
+}
 
 const argsObject = parseArgs(process.argv.slice(2));
 
@@ -36,7 +51,7 @@ const exit = () => {
 const init = async () => {
   process.stdin.on('data', async userInput => {
     
-    const userInputX = userInput.toString().trim().split(' ');
+    const userInputX = splitArgs(userInput) // userInput.toString().trim().split(' ');
 
     let cmd = userInputX.shift();
     const args = parseArgs(userInputX);
@@ -90,6 +105,10 @@ const init = async () => {
         
         case 'decompress':
           await decompress (currentDir, args);
+          break;
+        
+        case 'os':
+          await getOsInfo (currentDir, args);
           break;
         
         case 'exit':
