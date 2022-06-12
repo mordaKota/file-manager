@@ -1,4 +1,4 @@
-import { createReadStream } from "fs";
+import { createReadStream, createWriteStream } from "fs";
 import { __dirname, isExist, checkArgsCount, isFileExists, isDirExists } from "./constants.js";
 import path from 'path';
 import { writeFile, rename, copyFile, rm as remove } from "fs/promises";
@@ -34,8 +34,10 @@ export const add = async (userPath, userArgs) => {
     throw new Error('Operations fail: The file already exists');
   }
 
-  await writeFile(filePath, '');
+  //await writeFile(filePath, '');
+  createWriteStream(filePath);
 }
+
 
 export const rn = async (userPath, userArgs) => {
   checkArgsCount(2)(userArgs);
@@ -82,7 +84,14 @@ export const cp = async (userPath, userArgs) => {
     throw new Error('Operation fail: The file already exists in the destination folder');
   }
 
-  await copyFile (srcfilePath, destFilePath);
+ //await copyFile (srcfilePath, destFilePath);
+  const readStream = createReadStream(srcfilePath);
+  const writeStream = createWriteStream(destFilePath);
+
+  const result = new Promise((res) => readStream.on('end', () => res()));
+  readStream.on('data', chunk => writeStream.write(chunk));
+
+  return result;
 }
 
 export const mv = async (userPath, userArgs) => {
@@ -113,7 +122,15 @@ export const mv = async (userPath, userArgs) => {
     throw new Error('Operation fail: The file with such name already exists in the destination folder');
   }
 
-  await rename(srcfilePath, destFilePath);
+  //await rename(srcfilePath, destFilePath);
+  const readStream = createReadStream(srcfilePath);
+  const writeStream = createWriteStream(destFilePath);
+
+  const result = new Promise((res) => readStream.on('end', () => res()));
+  readStream.on('data', chunk => writeStream.write(chunk));
+
+  await result; 
+  await remove(srcfilePath);
 }
 
 export const rm = async (userPath, userArgs) => {

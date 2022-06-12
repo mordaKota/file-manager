@@ -1,3 +1,4 @@
+import { createReadStream } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 const { createHash } = await import('node:crypto');
 import path from 'path';
@@ -15,7 +16,17 @@ export const hash = async (userPath, userArgs) => {
     throw new Error('Operations fail: The specified path contains the folder, not file');
   }
 
-  const content = await readFile(filePath, 'utf8');
+  //const content = await readFile(filePath, 'utf8');
+  const content = createReadStream(filePath);
+  const promise = new Promise((res) => {
+    content.on("end", () => res());
+  });
+
   const crypto = createHash('sha256');
-  console.log(crypto.update(content).digest('hex'));
+  crypto.setEncoding('hex');
+  content.pipe(crypto);
+
+  await promise;
+  console.log(crypto.read());
+  // console.log(crypto.update(content).digest('hex'));
 }
